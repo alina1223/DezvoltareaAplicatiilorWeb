@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - Academia IT</title>
+    <title>Servicii - Academia IT</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         h1 { color: #333; }
@@ -11,8 +11,6 @@
         nav { margin-bottom: 20px; }
         nav a { margin-right: 15px; text-decoration: none; color: #0066cc; }
         nav a:hover { text-decoration: underline; }
-        .contact-info { margin-top: 20px; }
-        .contact-info p { margin: 10px 0; }
     </style>
 </head>
 <body>
@@ -23,13 +21,8 @@
         <a href="{{ route('contact.page') }}">Contact</a>
     </nav>
 
-    <h1>Contact</h1>
-    <p>Dacă aveți întrebări sau doriți să colaborați cu noi, vă rugăm să ne contactați utilizând informațiile de mai jos.</p>
-    
-    <div class="contact-info">
-        <p><strong>Email:</strong> academie@gmail.com</p>
-        <p><strong>Telefon:</strong> +40 (0)123 456 789</p>
-        <p><strong>Adresă:</strong> Str. Tehnologiei 123, București, România</p>
-    </div>
+    <h1>Servicii</h1>
+    <p>Academia IT oferă servicii de formare profesională în domeniul tehnologiei informației. Oferim cursuri online de înaltă calitate, mentorat personalizat și resurse educaționale complete pentru ca studenții noștri să devină experți în domeniu.</p>
+    <p>Serviciile noastre includ: Cursuri online, Webinare, Consultanță tehnică, Certificări profesionale și Suport în dezvoltarea carierei.</p>
 </body>
 </html>

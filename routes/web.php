@@ -1,44 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SiteController;
+use App\Http\Controllers\LoginController;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [SiteController::class, 'home'])->name('home');
+Route::get('/about', [SiteController::class, 'about'])->name('about');
+Route::get('/contact', [SiteController::class, 'contact'])->name('contact.page');
+Route::get('/services', [SiteController::class, 'services'])->name('services');
 
-
-Route::get('/about', function () {
-    return view('about');
-});
-
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact.page');
-
-
-Route::get('/login', function () {
-    return view('login');
-    
-});
-
-Route::post('/login', function () {
-    return "Autentificare...";
-});
-
-Route::get('/user/{id}', function ($id) {
-    return "Profil utilizator cu ID = " . $id;
-});
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [LoginController::class, 'register']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/article/{category}/{id}', function ($category, $id) {
     return "Categorie: $category, Articol ID: $id";
 });
 
-Route::prefix('admin')->group(function () {
+Route::get('/admin', [SiteController::class, 'admin'])->middleware(['auth', 'isAdmin'])->name('admin');
 
-    Route::get('/', function () {
-        return "Admin Dashboard";
-    });
-
+Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/users', function () {
         return "Admin Users";
     });
@@ -46,5 +29,5 @@ Route::prefix('admin')->group(function () {
     Route::get('/settings', function () {
         return "Admin Settings";
     });
-
 });
+
