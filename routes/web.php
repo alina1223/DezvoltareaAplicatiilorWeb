@@ -5,6 +5,7 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\LoginController;
 
 Route::get('/', [SiteController::class, 'home'])->name('home');
+Route::get('/home', [SiteController::class, 'home']); // Alias pentru / 
 Route::get('/about', [SiteController::class, 'about'])->name('about');
 Route::get('/contact', [SiteController::class, 'contact'])->name('contact.page');
 Route::get('/services', [SiteController::class, 'services'])->name('services');

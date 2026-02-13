@@ -1,152 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Academia IT</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
-        }
-        .login-container {
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: bold;
-        }
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            border-color: #0066cc;
-            box-shadow: 0 0 5px rgba(0,102,204,0.3);
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #0052a3;
-        }
-        .login-info {
-            background-color: #e3f2fd;
-            border-left: 4px solid #0066cc;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        nav {
-            text-align: center;
-            margin-top: 20px;
-        }
-        nav a {
-            text-decoration: none;
-            color: #0066cc;
-            font-weight: bold;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="login-container">
-        <h1>Autentificare</h1>
-        
-        <div class="login-info">
-            <strong>Credențiale test:</strong><br>
-            Email: admin@test.com<br>
-            Parolă: password123<br>
-            <em>Rol: Admin</em>
-        </div>
+@extends('layouts.app')
 
-        <form method="POST" action="/login">
-            @csrf
+@section('title', 'Login - Academia IT')
+
+@section('content')
+    <div style="max-width: 450px; margin: 40px auto;">
+        <div class="card">
+            <h1 style="text-align: center; border: none; padding: 0; color: #333; margin-bottom: 30px;">🔐 Autentificare</h1>
             
+            <div class="alert alert-info">
+                <strong>💡 Credențiale Test:</strong><br>
+                📧 Email: admin@test.com<br>
+                🔑 Parolă: password123<br>
+                👤 Rol: Admin
+            </div>
+
             @if ($errors->any())
-                <div style="background-color: #ffebee; border-left: 4px solid #d32f2f; padding: 15px; margin-bottom: 20px; border-radius: 4px; color: #d32f2f;">
-                    <strong>Eroare!</strong><br>
+                <div class="alert alert-error">
+                    <strong>❌ Eroare la autentificare!</strong><br>
                     @foreach ($errors->all() as $error)
-                        {{ $error }}<br>
+                        • {{ $error }}<br>
                     @endforeach
                 </div>
             @endif
             
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    required 
-                    placeholder="admin@test.com"
-                    autocomplete="email"
-                    value="{{ old('email') }}"
-                >
+            <form method="POST" action="/login">
+                @csrf
+                
+                <div class="form-group">
+                    <label for="email">📧 Adresă de Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        placeholder="admin@test.com"
+                        autocomplete="email"
+                        value="{{ old('email') }}"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">🔑 Parolă</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        placeholder="Introduceți parola"
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; text-align: center;">Conectează-te</button>
+            </form>
+
+            <div style="text-align: center; margin-top: 25px; padding-top: 25px; border-top: 1px solid #e0e0e0;">
+                <p style="color: #666; margin-bottom: 15px;">Nu aveți cont?</p>
+                <a href="{{ route('register') }}" class="btn btn-secondary" style="width: 100%; text-align: center;">Creați un cont nou</a>
             </div>
 
-            <div class="form-group">
-                <label for="password">Parolă:</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    required 
-                    placeholder="Introduceți parola"
-                    autocomplete="current-password"
-                >
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="{{ route('home') }}" style="color: #667eea; text-decoration: none; font-weight: 500;">← Înapoi la pagina principală</a>
             </div>
-
-            <button type="submit">Autentificare</button>
-        </form>
-
-        <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd;">
-            <p style="color: #666;">Nu aveți cont?</p>
-            <a href="{{ route('register') }}" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
-                Creați un cont nou
-            </a>
         </div>
-
-        <nav style="margin-top: 30px; text-align: center;">
-            <a href="{{ route('home') }}">← Înapoi la pagina principală</a>
-        </nav>
     </div>
-</body>
-</html>
+@endsection

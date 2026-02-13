@@ -1,32 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acasă - Academia IT</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        p { line-height: 1.6; color: #666; }
-        nav { margin-bottom: 20px; }
-        nav a { margin-right: 15px; text-decoration: none; color: #0066cc; padding: 8px 12px; background-color: #f0f0f0; border-radius: 4px; display: inline-block; }
-        nav a:hover { background-color: #e0e0e0; text-decoration: none; }
-        .button { display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; }
-        .button:hover { background-color: #0052a3; }
-    </style>
-</head>
-<body>
-    <nav>
-        <a href="{{ route('home') }}">Acasă</a>
-        <a href="{{ route('about') }}">Despre Noi</a>
-        <a href="{{ route('services') }}">Servicii</a>
-        <a href="{{ route('contact.page') }}">Contact</a>
-    </nav>
+@extends('layouts.app')
 
-    <h1>Pagina principală</h1>
-    <p>Bine ați venit la Academia IT! Suntem o platformă de cursuri online de inginerie și informatică care vă oferă acces la cursuri de calitate superioară în diverse domenii ale tehnologiei.</p>
-    <p>Explorați oferta noastră și descoperiți cum puteți dezvolta competențele necesare în era digitală.</p>
+@section('title', 'Acasă - Academia IT')
+
+@section('content')
+    <h1>� Pagina Principală</h1>
     
-    <a href="{{ route('contact.page') }}" class="button">Contactați-ne</a>
-</body>
-</html>
+    <p>Bine ați venit la <strong>{{ $appInfo['name'] }}</strong>! Suntem o platformă de cursuri online de inginerie și informatică care vă oferă acces la cursuri de calitate superioară în diverse domenii ale tehnologiei.</p>
+    
+    <p>{{ $appInfo['tagline'] }}</p>
+
+    <!-- ============ STATISTICI DINAMICE DIN CONTROLLER ============ -->
+    <div class="card">
+        <h2>📊 Statistici Platformă</h2>
+        <p>Iată informațiile din aplicația noastră:</p>
+        
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background-color: #667eea; color: white;">
+                    <th style="padding: 10px; text-align: left;">Indicator</th>
+                    <th style="padding: 10px; text-align: left;">Valoare</th>
+                    <th style="padding: 10px; text-align: left;">Descriere</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($statistics as $stat)
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 10px;"><strong>{{ $stat['icon'] }} {{ $stat['label'] }}</strong></td>
+                        <td style="padding: 10px; font-size: 1.2em; color: #667eea;"><strong>{{ $stat['value'] }}</strong></td>
+                        <td style="padding: 10px;">{{ $stat['description'] }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ============ INFORMAȚII DESPRE APLICAȚIE ============ -->
+    <div class="card">
+        <h2>ℹ️ Despre {{ $appInfo['name'] }}</h2>
+        
+        <ul style="list-style: none; padding: 0;">
+            <li style="padding: 8px 0;"><strong>📛 Nume:</strong> {{ $appInfo['name'] }}</li>
+            <li style="padding: 8px 0;"><strong>💡 Motto:</strong> {{ $appInfo['tagline'] }}</li>
+            <li style="padding: 8px 0;"><strong>🗓️ Fondată în:</strong> {{ $appInfo['founded'] }}</li>
+            <li style="padding: 8px 0;"><strong>⏳ Ani de operare:</strong> {{ $appInfo['years_active'] }} ani</li>
+            <li style="padding: 8px 0;"><strong>🌍 Locație:</strong> {{ $appInfo['country'] }}</li>
+            <li style="padding: 8px 0;"><strong>🎯 Misiune:</strong> {{ $appInfo['mission'] }}</li>
+            <li style="padding: 8px 0;"><strong>🔮 Viziune:</strong> {{ $appInfo['vision'] }}</li>
+        </ul>
+    </div>
+
+    <!-- ============ CATEGORII PRINCIPALE ============ -->
+    <div class="card">
+        <h2>🔍 Categoriile Noastre Principale</h2>
+        <p>Explorați cursurile noastre din următoarele domenii:</p>
+        
+        @php
+            $categories = [
+                'Web Development' => 'Învață HTML, CSS, JavaScript, Laravel și alte tehnologii web',
+                'Mobile Development' => 'Dezvoltă aplicații pentru iOS și Android',
+                'Data Science' => 'Master-ezi Python, Machine Learning și Big Data',
+                'Cloud Computing' => 'Lucrează cu AWS, Azure și Google Cloud',
+                'DevOps' => 'Automatizare, CI/CD și infrastructure as code',
+                'Cybersecurity' => 'Protejează sistemele și datele împotriva amenințărilor'
+            ]
+        @endphp
+        
+        <ul>
+            @foreach ($categories as $category => $description)
+                <li>
+                    <strong>{{ $category }}:</strong> {{ $description }}
+                </li>
+            @endforeach
+        </ul>
+    </div>
+
+    <a href="{{ route('services') }}" class="btn">Explorează Cursurile Noastre</a>
+@endsection
