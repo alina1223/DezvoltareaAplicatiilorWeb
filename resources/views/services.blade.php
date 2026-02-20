@@ -98,3 +98,5 @@
 
     <a href="{{ route('contact.page') }}" class="btn">Contactează-ne Pentru Informații Detaliate</a>
 @endsection
+
+

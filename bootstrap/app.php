@@ -11,6 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Exclud rutele API din verificare CSRF (API-urile folosesc alte mecanisme de securitate)
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
+        ]);
+        
         $middleware->alias([
             'isAdmin' => \App\Http\Middleware\IsAdmin::class,
         ]);

@@ -76,3 +76,6 @@
 
     <a href="{{ route('services') }}" class="btn">Explorează Cursurile Noastre</a>
 @endsection
+
+
+

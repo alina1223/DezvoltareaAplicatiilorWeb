@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testare API Servicii</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .section {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 1em;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #38a169;
+        }
+        
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+        
+        .btn-info {
+            background: #4299e1;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background: #3182ce;
+        }
+        
+        .links {
+            margin-top: 20px;
+        }
+        
+        .links a {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        
+        .links a:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            display: none;
+        }
+        
+        #results.show {
+            display: block;
+        }
+        
+        .success {
+            border-left-color: #48bb78;
+            background: #f0fff4;
+            color: #22543d;
+        }
+        
+        .error {
+            border-left-color: #f56565;
+            background: #fff5f5;
+            color: #742a2a;
+        }
+        
+        .info {
+            border-left-color: #4299e1;
+            background: #ebf8ff;
+            color: #2c5282;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Testare API Servicii</h1>
+            <p class="subtitle">Testeaza operatiile CRUD din browser</p>
+        </header>
+        
+        <div class="content">
+            <!-- SECTIUNEA GET -->
+            <div class="section">
+                <h2>📖 GET Requests</h2>
+                
+                <div class="form-group">
+                    <label>Service ID:</label>
+                    <input type="number" id="getServiceId" value="1" min="1">
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-info" onclick="getAllServices()">Toate Serviciile</button>
+                    <button class="btn-info" onclick="getSingleService()">Serviciu dupa ID</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>Category ID:</label>
+                    <input type="number" id="getCategoryId" value="1" min="1">
+                </div>
+                
+                <button class="btn-info" style="width: 100%;" onclick="filterByCategory()">Filtreaza dupa Categorie</button>
+                
+                <div class="form-group">
+                    <label>Pret maxim (RON):</label>
+                    <input type="number" id="maxPrice" value="2000" min="0">
+                </div>
+                
+                <button class="btn-info" style="width: 100%;" onclick="priceRange()">Servicii sub Pret</button>
+                
+                <div class="form-group">
+                    <label>Sortare dupa Pret:</label>
+                    <select id="sortOrder">
+                        <option value="asc">Ascending (Mic → Mare)</option>
+                        <option value="desc">Descending (Mare → Mic)</option>
+                    </select>
+                </div>
+                
+                <button class="btn-info" style="width: 100%;" onclick="sortByPrice()">Sorteaza</button>
+                
+                <button class="btn-info" style="width: 100%; margin-top: 10px;" onclick="getStatistics()">Statistici</button>
+                
+                <div class="links">
+                    <strong>Quick Links:</strong><br>
+                    <a href="http://localhost:8000/api/services" target="_blank">Toate Serviciile</a>
+                    <a href="http://localhost:8000/api/statistics" target="_blank">Statistici</a>
+                </div>
+            </div>
+            
+            <!-- SECTIUNEA POST/PUT/DELETE -->
+            <div class="section">
+                <h2>✏️ POST/PUT/DELETE Requests</h2>
+                
+                <div class="form-group">
+                    <label>Titlu Serviciu:</label>
+                    <input type="text" id="serviceTitle" placeholder="Ex: Consultanta Web">
+                </div>
+                
+                <div class="form-group">
+                    <label>Descriere:</label>
+                    <textarea id="serviceDescription" placeholder="Ex: Oferim consultanta profesionala"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Pret (RON):</label>
+                    <input type="number" id="servicePrice" placeholder="1500" step="0.01" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label>Categoria:</label>
+                    <select id="serviceCategoryId">
+                        <option value="1">Web Development</option>
+                        <option value="2">Mobile Development</option>
+                        <option value="3">Design</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Activ:</label>
+                    <select id="serviceActive">
+                        <option value="true">Da</option>
+                        <option value="false">Nu</option>
+                    </select>
+                </div>
+                
+                <button class="btn-success" onclick="createService()" style="width: 100%;">📝 Creeaza Serviciu (POST)</button>
+                
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>ID Serviciu (pentru update/delete):</label>
+                    <input type="number" id="updateServiceId" value="1" min="1">
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" onclick="updateService()">🔄 Actualizeaza (PUT)</button>
+                    <button class="btn-danger" onclick="deleteService()">🗑️ Sterge (DELETE)</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RESULTS -->
+        <div style="padding: 30px;">
+            <div id="results"></div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        
+        function showResults(data, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.textContent = JSON.stringify(data, null, 2);
+            resultsDiv.className = `show ${type}`;
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        function handleError(error) {
+            showResults({ error: error.message }, 'error');
+        }
+        
+        async function getAllServices() {
+            try {
+                const response = await fetch(`${API_URL}/services`);
+                const data = await response.json();
+                showResults(data, 'success');
+            } catch(e) { handleError(e); }
+        }
+        
+        async function getSingleService() {
+            try {
+                const id = document.getElementById('getServiceId').value;
+                const response = await fetch(`${API_URL}/services/${id}`);
+                const data = await response.json();
+                showResults(data, response.ok ? 'success' : 'error');
+            } catch(e) { handleError(e); }
+        }
+        
+        async function filterByCategory() {
+            try {
+                const id = document.getElementById('getCategoryId').value;
+                const response = await fetch(`${API_URL}/services/category/${id}`);
+                const data = await response.json();
+                showResults(data, response.ok ? 'success' : 'error');
+            } catch(e) { handleError(e); }
+        }
+        
+        async function sortByPrice() {
+            try {
+                const order = document.getElementById('sortOrder').value;
+                const response = await fetch(`${API_URL}/services/sort/${order}`);
+                const data = await response.json();
+                showResults(data, 'success');
+            } catch(e) { handleError(e); }
+        }
+        
+        async function priceRange() {
+            try {
+                const price = document.getElementById('maxPrice').value;
+                const response = await fetch(`${API_URL}/services/price-range/${price}`);
+                const data = await response.json();
+                showResults(data, 'success');
+            } catch(e) { handleError(e); }
+        }
+        
+        async function getStatistics() {
+            try {
+                const response = await fetch(`${API_URL}/statistics`);
+                const data = await response.json();
+                showResults(data, 'success');
+            } catch(e) { handleError(e); }
+        }
+        
+        async function createService() {
+            try {
+                const payload = {
+                    title: document.getElementById('serviceTitle').value,
+                    description: document.getElementById('serviceDescription').value,
+                    price: parseFloat(document.getElementById('servicePrice').value),
+                    category_id: parseInt(document.getElementById('serviceCategoryId').value),
+                    is_active: document.getElementById('serviceActive').value === 'true'
+                };
+                
+                if (!payload.title || !payload.description || !payload.price) {
+                    alert('Completeaza toate campurile!');
+                    return;
+                }
+                
+                const response = await fetch(`${API_URL}/services`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                showResults(data, response.ok ? 'success' : 'error');
+                if (response.ok) {
+                    document.getElementById('updateServiceId').value = data.data.id;
+                }
+            } catch(e) { handleError(e); }
+        }
+        
+        async function updateService() {
+            try {
+                const id = document.getElementById('updateServiceId').value;
+                const payload = {
+                    title: document.getElementById('serviceTitle').value || undefined,
+                    description: document.getElementById('serviceDescription').value || undefined,
+                    price: document.getElementById('servicePrice').value ? parseFloat(document.getElementById('servicePrice').value) : undefined,
+                    category_id: document.getElementById('serviceCategoryId').value ? parseInt(document.getElementById('serviceCategoryId').value) : undefined,
+                    is_active: document.getElementById('serviceActive').value === 'true'
+                };
+                
+                // Remove undefined values
+                Object.keys(payload).forEach(key => payload[key] === undefined && delete payload[key]);
+                
+                const response = await fetch(`${API_URL}/services/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                showResults(data, response.ok ? 'success' : 'error');
+            } catch(e) { handleError(e); }
+        }
+        
+        async function deleteService() {
+            try {
+                const id = document.getElementById('updateServiceId').value;
+                if (!confirm(`Sigur vrei sa stergi serviciul cu ID ${id}?`)) return;
+                
+                const response = await fetch(`${API_URL}/services/${id}`, {
+                    method: 'DELETE'
+                });
+                const data = await response.json();
+                showResults(data, response.ok ? 'success' : 'error');
+            } catch(e) { handleError(e); }
+        }
+        
+        // Load all services on page load
+        window.addEventListener('DOMContentLoaded', getAllServices);
+    </script>
+</body>
+</html>
